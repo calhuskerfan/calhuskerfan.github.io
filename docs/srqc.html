@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A FIFO Queue consumer with a novel parallel processing technique">
     <title>SR Queue Consumer</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
@@ -12,15 +13,16 @@
 <body>
     <div class="container">
         <h1 id="sr-queue-consumer">SR Queue Consumer</h1>
+        <p class="lead">
+            FIFO and a Galaxy Far Far Away
+        </p>
         <hr />
-        <h2>
-            FIFO in a Galaxy Far Far Away
-        </h2>
         <div>
-            <p>The SR Queue Consumer is a project that explores a message queue consumer processing pattern to increase
-                throughput of message transformations in a First In First Out (FIFO) manner. It was inspired by the
-                intersection
-                of a problem I was working on and an article on the loading design for Disney’s Millennium Falcon:
+            <p>The SR Queue Consumer is a project that explores a message queue consumer processing pattern designed to
+                increase
+                throughput of message transformations in a First In First Out (FIFO) manner. Its primary benefit is low
+                overhead to maintain message order during the processing cycle. It was inspired by the
+                intersection of a problem I was working on and a patent for Disney’s Millennium Falcon:
                 Smugglers
                 Run
                 attraction.</p>
@@ -32,20 +34,19 @@
         <div>
             <h2 id="background">Background</h2>
             <p>
-                Millennium Falcon: Smugglers Run is an interactive motion simuator ride that puts a crew of 6 riders
-                into the
-                cockpit of the Millennium Falcon. An imaginative component of the ride is its loading and segmentation
-                which
-                allow for high throughput of riders (lower wait times) and an immersive loading experience where each
-                crew
-                waits
-                their turn in the chess room of the millenium falcon. To create the expereince there are actually 4 ride
-                turntables each with 7 pods, where each pod encapusulates the ride experience for each crew.
+                Millennium Falcon: Smugglers Run is an interactive motion simulator ride that puts a crew of 6 riders
+                into the cockpit of the Millennium Falcon. An imaginative component of the ride is its loading and
+                segmentation
+                which allow for high throughput of riders (lower wait times) and an immersive loading experience where
+                each
+                crew waits their turn in the chess room of the Millennium Falcon. To create the experience there are 4
+                ride
+                turntables each with 7 pods, where each pod encapsulates the ride experience for each crew.
 
             </p>
             <p>This <a
                     href="https://www.bizjournals.com/orlando/news/2019/10/04/how-it-works-patent-behind-disneys-millennium.html">article</a>
-                has a detailed description (appologize if you hit a paywall). There is another, shorter description <a
+                has a detailed description (apologies if you hit a paywall). There is another, shorter description <a
                     href="https://disneydiary.com/2019/10/new-disney-patent-shows-how-the-millennium-falcon-ride-works/">here</a>.
                 Finally, the <a href="https://patents.google.com/patent/EP3628383A1/en">patent</a> is also available.
             </p>
@@ -56,115 +57,115 @@
             <h2 id="introduction">Introduction</h2>
 
             <p>As luck would have it I had that patent somewhere in my mind while I was working on some throughput
-                issues
-                for a
-                FIFO queue. In my case the per message transformation time was the primary bottleneck in the system.
+                issues for a FIFO queue. In my case the per message transformation time was the primary bottleneck in
+                the system.
             </p>
 
             <div>There are a few general <a href="https://en.wikipedia.org/wiki/Message_queue">patterns for this</a>,
-                two of
-                the
-                most popular being.</div>
+                two of the most popular being.</div>
 
             <ol>
                 <li>Process messages using competing consumer pattern with a SequenceId that re-assembles the order in a
-                    post
-                    processing step.</li>
+                    post processing step.</li>
                 <li>Using some form of partitioning structure within the queue to parallel messages. While this
-                    increases
-                    overall speed of a population of messages any messages assigned to a particular partition are still
-                    only
-                    processed one at a time.</li>
+                    increases overall speed of a population of messages any messages assigned to a particular partition
+                    are still
+                    only processed one at a time.</li>
             </ol>
 
-            <p>In my case I did not want to worry about the re-assembly and wanted faster 'per partition' processing.
+            <p>I did not want to worry about the re-assembly and wanted faster 'per partition' processing.
             </p>
 
             <p>Taking inspiration from the segmented turntable construct envisioned in Smugglers Run the system is able
-                to increase throughput, maintain FIFO order, and eliminate any re-assembly when messages are complete.
+                to increase throughput, maintain FIFO order, and eliminate any re-assembly when messages are complete.  The analogy being each message waits its turn in the chess room, but wait times for the inbound queue are reduced by having multiple messages transformed at a time as they 'rotate' from entry to exit.
             </p>
+            <p>TL;DR.  I just want to see <a href="https://github.com/calhuskerfan/srqc">the code</a></p>
         </div>
         <div>
             <h2 id="system-overview">System Overview</h2>
-            <div>The following is a diagram of the primary system components in the SR Queue Consumer system</div>
-            <div><img src="./assets/images/srloader.drawio.svg" alt="Alt text here" /></div>
-            <p>The sytems contains a virtual carousel with a configurable number of pods. Pods operate on a message
+            <div class="container">The following is a diagram of the primary system components in the SR Queue Consumer system</div>
+            <div class="container my-3">
+                <div><img src="./assets/images/srloader.drawio.svg" alt="Alt text here" /></div>
+            </div>
+            <p>The system contains a virtual carousel with a configurable number of pods. Pods operate on a message
                 via a thread assigned to the pod. The system loads and unloads the pods in order. As pods are loaded and
                 unloaded
                 they are 'rotated' to allow the next message to start processing. The system does not have to concern
-                itslef whn
-                any of the messages on the carousel finish relative to each other. If a message finisnes processing
+                itself when any of the messages on the carousel finish relative to each other. If a message finishes processing
                 before it
                 reaches the exit it simply waits. If a message is rotated to the exit while it is still running the
                 carousel
-                waits till it is comleted, unloads it, and continues operation.</p>
+                waits till it is completed, unloads it, and continues operation.</p>
             <p>So hypothetically if a message takes 250 msec to process then our maximum message rate is 4 messages /
-                sec
-                if
+                sec if
                 processed in a serial manner, however if we can process 3 'pods' at a time we increase our rate to 12
                 messages / sec.
-                While we will not see the theoritical throughput based on management overhead and message timing
-                variation
-                we
-                will see a significnat improvement.</p>
+                While we will not see the theoretical throughput based on management overhead and message timing
+                variation we
+                will see a significant improvement.</p>
 
 
             <div>The primary system components are:</div>
-
-            <table class="table table-striped table-sm">
-                <thead>
-                    <tr>
-                        <th>Component</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Inbound Queue</td>
-                        <td>A typical inbound queue in a Message Orientated Middleware (MOM) style application.</td>
-                    </tr>
-                    <tr>
-                        <td>Staging Area</td>
-                        <td>The staging area is a small internal queue that helps to optimize the loading and unloading
-                            operations.</td>
-                    </tr>
-                    <tr>
-                        <td>Message Loading</td>
-                        <td>Message loading monitors the staging area and the carousel state to place waiting messages
-                            from
-                            the
-                            staging area into a pod for processing.</td>
-                    </tr>
-                    <tr>
-                        <td>Pod</td>
-                        <td>A pod is a container that processes the message from inbound to outbound format on a thread.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Carousel</td>
-                        <td>The carousel serves as an organizational construct for where messages are in their
-                            processing
-                            order.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Message Unloading</td>
-                        <td>When a pod is 'rotated' to the exit it is unloaded. If the pod is still running it will wait
-                            for
-                            completion before advancing.</td>
-                    </tr>
-                    <tr>
-                        <td>Outbound Queue</td>
-                        <td>Messages that have completed processing are placed in the outbound queue.</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="container my-2">
+                <table class="table table-striped table-sm">
+                    <thead>
+                        <tr>
+                            <th>Component</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Inbound Queue</td>
+                            <td>A typical inbound queue in a Message Orientated Middleware (MOM) style application.</td>
+                        </tr>
+                        <tr>
+                            <td>Staging Area</td>
+                            <td>The staging area is a small internal queue that helps to optimize the loading and
+                                unloading
+                                operations.</td>
+                        </tr>
+                        <tr>
+                            <td>Message Loading</td>
+                            <td>Message loading monitors the staging area and the carousel state to place waiting
+                                messages
+                                from
+                                the
+                                staging area into a pod for processing.</td>
+                        </tr>
+                        <tr>
+                            <td>Pod</td>
+                            <td>A pod is a container that processes the message from inbound to outbound format on a
+                                thread.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Carousel</td>
+                            <td>The carousel serves as an organizational construct for where messages are in their
+                                processing
+                                order.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Message Unloading</td>
+                            <td>When a pod is 'rotated' to the exit it is unloaded. If the pod is still running it will
+                                wait
+                                for
+                                completion before advancing.</td>
+                        </tr>
+                        <tr>
+                            <td>Outbound Queue</td>
+                            <td>Messages that have completed processing are placed in the outbound queue.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <div>
             <h3 id="operation">Operation</h3>
 
-            <p>The system operates in the following manner</p>
+            <p>The following is a detailed description of the steps described above.</p>
 
             <ol>
                 <li>Messages are added to the inbound queue by a message producer</li>
@@ -175,7 +176,7 @@
                 <li>This process continues until the message is rotated to the exit. If the processing is completed the
                     message
                     is unloaded. If the message reaches the exit before it is finished the system will pause until the
-                    procecssing is complete.</li>
+                    processing is complete.</li>
                 <li>The message is delivered to the exit queue.</li>
                 <li>The carousel is rotated so that the now empty pod is moved to the entry to pick up another message
                 </li>
@@ -189,10 +190,10 @@
         <div>
             <h3 id="benefits">Benefits</h3>
 
-            <div>Some benefits to this design include:</div>
+            <p>Some benefits to this design include:</p>
 
             <ol>
-                <li>Improved througput when the message processing time is significant. Either through complex
+                <li>Improved throughput when the message processing time is significant. Either through complex
                     processing or
                     waiting on I/O or services.</li>
                 <li>The process is self contained.</li>
@@ -201,18 +202,18 @@
         <div>
             <h3 id="limitations">Limitations.</h3>
 
-            <div>A few notable limitations to the system.</div>
+            <p>A few notable limitations to the system.</p>
 
             <ol>
                 <li>There are diminishing returns as the message process time reduces. Eventually the overhead of thread
                     synchronization hampers performance.</li>
-                <li>More managment of ‘in process messages’. By allowing [number of pods] + [staging area size] messages
+                <li>More management of 'in process messages'. By allowing [number of pods] + [staging area size] messages
                     into
-                    the system at a time we lose some of the message resielence the inbound queue provides.</li>
+                    the system simultaneously we lose some of the message resilience the inbound queue provides.</li>
                 <li>The transformation of the message must be self contained, I.e. the only target is the exit queue. If
                     any
                     portion of the processing had external (database update for example) side effects that also had FIFO
-                    requirements you could not use this pattern as there is no control of operational sequence while pds
+                    requirements you could not use this pattern as there is no control of operational sequence while pods
                     are
                     processing.</li>
             </ol>
@@ -221,9 +222,9 @@
             <h2 id="running-the-project">Running the project.</h2>
 
             <p>For the demonstration project the message transformation is simply a string update and a Thread.Sleep
-                to simulate processing time.</p>
+                to simulate processing time. <a href="https://github.com/calhuskerfan/srqc">sync the repo</a></p>
 
-            <div>Pre-requsites</div>
+            <div>Pre-requisites</div>
             <ol>
                 <li>git</li>
                 <li>dotnet9</li>
@@ -237,8 +238,8 @@
             </ol>
 
             <p>After logging information about the operations involved in processing the output will look something
-                like the following (timestamps and log level ommitted)</p>
-            <div class="container">
+                like the following (timestamps and log level omitted)</p>
+            <div class="container my-3">
                 <div class="highlight">
                     <pre class="highlight"><code>010001:000:0000169
 ...
@@ -256,8 +257,10 @@ total processing time:8545.3955 msec.  Accumulator 21908 msec.  2.56371984187273
                 delays.
             </p>
 
-            <p>You can experiment with different parameters found at the top of <a href = https://github.com/calhuskerfan/srqc/blob/topic/initial/src/srqc/Program.cs#L7>Program.cs</a>, the defaults are:</p>
-            <div class="container">
+            <p>You can experiment with different parameters found at the top of <a
+                    href=https://github.com/calhuskerfan/srqc/blob/topic/initial/src/srqc/Program.cs#L7>Program.cs</a>,
+                the defaults are:</p>
+            <div class="container my-3">
                 <div class="language-csharp highlighter-rouge">
                     <div class="highlight">
                         <pre class="highlight"><code><span class="n">ApplicationParameters</span> <span class="n">appParams</span> <span class="p">=</span> <span class="k">new</span><span class="p">()</span>
@@ -310,25 +313,19 @@ total processing time:8545.3955 msec.  Accumulator 21908 msec.  2.56371984187273
                     messages and externalizing the pod processing logic the system can be re-used.</li>
                 <li>Tighten up the thread and event synchronization.</li>
                 <li>Error Handling. What happens when a message fails, what should ripple upstream.</li>
-                <li>Change the running boolean to an event handle.</li>
-                <li>Run as a service.</li>
-                <li>Hook the system up to a real message queue, I.e. rabbitMQ.</li>
-                <li>Add a multiple carousel construct. This could pair up to a partitioned queue to create greater
-                    overall system performance and resielency.</li>
+                <li>Run as an IHostedService.</li>
+                <li>Incorporate a common message queue, I.e. rabbitMQ.</li>
             </ol>
         </div>
         <div>
             <h2 id="summary">Summary</h2>
 
-            <div>In the end this project was primarly a thought exercise, however it was succesful with the requirements
-                that
-                I
-                had envisioned for it, namely:</div>
+            <div>In the end this project was primarily a thought exercise, however it was successful with the requirements that I had envisioned for it, namely:</div>
             <ol>
                 <li>speeding up parallel processing of a FIFO queue where the bottleneck was the message processing
                     itself.
                 </li>
-                <li>not adding any external complexities to maintaing message order.</li>
+                <li>not adding any external complexities to maintain message order.</li>
             </ol>
 
             <p>If nothing else it was an opportunity to take a look at a problem with a new lens and see what comes
