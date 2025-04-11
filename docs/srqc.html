@@ -18,17 +18,15 @@
         </p>
         <hr />
         <div>
-            <p>The SR Queue Consumer is a project that explores a message queue consumer processing pattern designed to
-                increase
-                throughput of message transformations in a First In First Out (FIFO) manner. Its primary benefit is low
+            <p>The SR Queue Consumer project explores a message queue consumer designed to
+                increase throughput of message transformations in a First In First Out (FIFO) manner. Its primary
+                benefit is low
                 overhead to maintain message order during the processing cycle. It was inspired by the
                 intersection of a problem I was working on and a patent for Disney’s Millennium Falcon:
-                Smugglers
-                Run
-                attraction.</p>
+                Smugglers Run attraction.</p>
 
-            <p>This document assumes some level of familiarity with queues, message processing, and message orientated
-                middleware concepts.</p>
+            <p>This document assumes some level of familiarity with queues, message transformation, and <a href="https://en.wikipedia.org/wiki/Message-oriented_middleware"></a>message orientated
+                middleware concepts</a>.</p>
         </div>
 
         <div>
@@ -37,11 +35,9 @@
                 Millennium Falcon: Smugglers Run is an interactive motion simulator ride that puts a crew of 6 riders
                 into the cockpit of the Millennium Falcon. An imaginative component of the ride is its loading and
                 segmentation
-                which allow for high throughput of riders (lower wait times) and an immersive loading experience where
-                each
-                crew waits their turn in the chess room of the Millennium Falcon. To create the experience there are 4
-                ride
-                turntables each with 7 pods, where each pod encapsulates the ride experience for each crew.
+                which allow for high throughput of riders (lower wait times) with an immersive loading experience. Each
+                crew waits their turn in the chess room of the Millennium Falcon before being loaded into their individual 'cockpit' for the ride.  To create the experience and the short(er) wait times there are 4
+                ride turntables each with 7 pods, where each pod encapsulates the ride experience for a crew.
 
             </p>
             <p>This <a
@@ -56,7 +52,7 @@
 
             <h2 id="introduction">Introduction</h2>
 
-            <p>As luck would have it I had that patent somewhere in my mind while I was working on some throughput
+            <p>As happenstance would have it, that patent was somewhere in my mind while I was working on some throughput
                 issues for a FIFO queue. In my case the per message transformation time was the primary bottleneck in
                 the system.
             </p>
@@ -69,7 +65,7 @@
                     post processing step.</li>
                 <li>Using some form of partitioning structure within the queue to parallel messages. While this
                     increases overall speed of a population of messages any messages assigned to a particular partition
-                    are still only processed one at a time.</li>
+                    are still only processed serially.</li>
             </ol>
 
             <p>I did not want to worry about the re-assembly and wanted faster 'per partition' processing.</p>
@@ -77,34 +73,28 @@
             <p>Taking inspiration from the segmented turntable construct envisioned in Smugglers Run the system is able
                 to increase throughput, maintain FIFO order, and eliminate any re-assembly when messages are complete.
                 The analogy being each message waits its turn in the chess room, but wait times for the inbound queue
-                are reduced by having multiple messages transformed at a time as they 'rotate' from entry to exit.
+                are reduced by having multiple messages transformed at a time as they 'rotate' from entry to exit.  They exit in the same order they arrived, but experienced the ride (transformation) separately.
             </p>
             <p>TL;DR. I just want to see <a href="https://github.com/calhuskerfan/srqc">the code</a></p>
         </div>
         <div>
             <h2 id="system-overview">System Overview</h2>
-            <div class="container">The following is a diagram of the primary system components in the SR Queue Consumer
-                system</div>
+            <div class="container">The SR Queue Consumer has the following major system components</div>
             <div class="container my-3">
                 <div><img src="./assets/images/srloader.drawio.svg" alt="Alt text here" /></div>
             </div>
             <p>The system contains a virtual carousel with a configurable number of pods. Pods operate on a message
                 via a thread assigned to the pod. The system loads and unloads the pods in order. As pods are loaded and
-                unloaded
-                they are 'rotated' to allow the next message to start processing. The system does not have to concern
+                unloaded they are 'rotated' to allow the next message to start processing. The system does not have to concern
                 itself when any of the messages on the carousel finish relative to each other. If a message finishes
-                processing
-                before it
-                reaches the exit it simply waits. If a message is rotated to the exit while it is still running the
-                carousel
-                waits till it is completed, unloads it, and continues operation.</p>
+                processing before it reaches the exit it simply waits. If a message is rotated to the exit while it is
+                still running the carousel waits till it is completed, unloads it, and continues operation.</p>
             <p>So hypothetically if a message takes 250 msec to process then our maximum message rate is 4 messages /
-                sec if
-                processed in a serial manner, however if we can process 3 'pods' at a time we increase our rate to 12
-                messages / sec.
-                While we will not see the theoretical throughput based on management overhead and message timing
-                variation we
-                will see a significant improvement.</p>
+                sec if processed in a serial manner, however if we can process 3 'pods' at a time we increase our rate
+                to 12
+                messages / sec. While we will not see the theoretical throughput based on management overhead and
+                message timing
+                variation we will see a significant improvement.</p>
 
 
             <div>The primary system components are:</div>
@@ -218,7 +208,7 @@
                     the system simultaneously we lose some of the message resilience the inbound queue provides.</li>
                 <li>The transformation of the message must be self contained, I.e. the only target is the exit queue. If
                     any
-                    portion of the processing had external (database update for example) side effects that also had FIFO
+                    portion of the processing has external (database update for example) side effects that also have FIFO
                     requirements you could not use this pattern as there is no control of operational sequence while
                     pods
                     are
@@ -228,8 +218,8 @@
         <div>
             <h2 id="running-the-project">Running the project.</h2>
 
-            <p>For the demonstration project the message transformation is simply a string update and a Thread.Sleep
-                to simulate processing time. <a href="https://github.com/calhuskerfan/srqc">sync the repo</a></p>
+            <p>For the demonstration project the message transformation is simply a string update and a Thread.Sleep()
+                to simulate processing time.  I used Windows 11, but any hardware running <a href="https://dotnet.microsoft.com/en-us/download">.NET 9.0</a> should work without an issue.</p>
 
             <div>Pre-requisites</div>
             <ol>
@@ -240,7 +230,7 @@
 
             <div>Perform the following steps to execute the project</div>
             <ol>
-                <li>sync the repo</li>
+                <li><a href="https://github.com/calhuskerfan/srqc">Sync the repo</a></li>
                 <li>dotnet run –project ./src/srqc -c Release</li>
             </ol>
 
@@ -259,7 +249,7 @@ total processing time:8545.3955 msec.  Accumulator 21908 msec.  2.56371984187273
             <p>where the first column is the message id, the second column is the pod that processed the message, and
                 the
                 third
-                is the <strong>configured</strong> delay. Total processing time is the start to finish of the execution.
+                is the configured delay (message processing simulation). Total processing time is the start to finish of the execution.
                 Accumulator is the ideal time if all the messages were processed serially with no intra processing
                 delays.
             </p>
@@ -320,7 +310,7 @@ total processing time:8545.3955 msec.  Accumulator 21908 msec.  2.56371984187273
                 <li>Tighten up the thread and event synchronization.</li>
                 <li>Error Handling Patterns. What happens when a message fails, what should ripple upstream.</li>
                 <li>Run as an IHostedService.</li>
-                <li>Incorporate a common message queue, I.e. rabbitMQ.</li>
+                <li>Incorporate a common message queue, I.e. <a href="https://www.rabbitmq.com/">rabbitmq</a>.</li>
             </ol>
         </div>
         <div>
@@ -335,9 +325,7 @@ total processing time:8545.3955 msec.  Accumulator 21908 msec.  2.56371984187273
                 <li>not adding any external complexities to maintain message order.</li>
             </ol>
 
-            <p>If nothing else it was an opportunity to take a look at a problem with a new lens and see what comes
-                out of
-                it.
+            <p>If nothing else it was an opportunity to look at a problem with a new lens and see what comes of it.
             </p>
 
             <p>Your mileage may vary.</p>
