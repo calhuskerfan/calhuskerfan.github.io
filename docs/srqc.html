@@ -69,21 +69,22 @@
                     post processing step.</li>
                 <li>Using some form of partitioning structure within the queue to parallel messages. While this
                     increases overall speed of a population of messages any messages assigned to a particular partition
-                    are still
-                    only processed one at a time.</li>
+                    are still only processed one at a time.</li>
             </ol>
 
-            <p>I did not want to worry about the re-assembly and wanted faster 'per partition' processing.
-            </p>
+            <p>I did not want to worry about the re-assembly and wanted faster 'per partition' processing.</p>
 
             <p>Taking inspiration from the segmented turntable construct envisioned in Smugglers Run the system is able
-                to increase throughput, maintain FIFO order, and eliminate any re-assembly when messages are complete.  The analogy being each message waits its turn in the chess room, but wait times for the inbound queue are reduced by having multiple messages transformed at a time as they 'rotate' from entry to exit.
+                to increase throughput, maintain FIFO order, and eliminate any re-assembly when messages are complete.
+                The analogy being each message waits its turn in the chess room, but wait times for the inbound queue
+                are reduced by having multiple messages transformed at a time as they 'rotate' from entry to exit.
             </p>
-            <p>TL;DR.  I just want to see <a href="https://github.com/calhuskerfan/srqc">the code</a></p>
+            <p>TL;DR. I just want to see <a href="https://github.com/calhuskerfan/srqc">the code</a></p>
         </div>
         <div>
             <h2 id="system-overview">System Overview</h2>
-            <div class="container">The following is a diagram of the primary system components in the SR Queue Consumer system</div>
+            <div class="container">The following is a diagram of the primary system components in the SR Queue Consumer
+                system</div>
             <div class="container my-3">
                 <div><img src="./assets/images/srloader.drawio.svg" alt="Alt text here" /></div>
             </div>
@@ -91,7 +92,8 @@
                 via a thread assigned to the pod. The system loads and unloads the pods in order. As pods are loaded and
                 unloaded
                 they are 'rotated' to allow the next message to start processing. The system does not have to concern
-                itself when any of the messages on the carousel finish relative to each other. If a message finishes processing
+                itself when any of the messages on the carousel finish relative to each other. If a message finishes
+                processing
                 before it
                 reaches the exit it simply waits. If a message is rotated to the exit while it is still running the
                 carousel
@@ -205,15 +207,20 @@
             <p>A few notable limitations to the system.</p>
 
             <ol>
-                <li>There are diminishing returns as the message process time reduces. Eventually the overhead of thread
+                <li>Diminishing returns as the message process time reduces. Eventually the overhead of thread
                     synchronization hampers performance.</li>
-                <li>More management of 'in process messages'. By allowing [number of pods] + [staging area size] messages
+                <li>Performance degradation by 'long pole' messages. Messages that take a significantly longer amount of
+                    time to process than their peers may drag down the throughput relative to a competing consumer
+                    pattern.</li>
+                <li>More management of 'in process messages'. By allowing [number of pods] + [staging area size]
+                    messages
                     into
                     the system simultaneously we lose some of the message resilience the inbound queue provides.</li>
                 <li>The transformation of the message must be self contained, I.e. the only target is the exit queue. If
                     any
                     portion of the processing had external (database update for example) side effects that also had FIFO
-                    requirements you could not use this pattern as there is no control of operational sequence while pods
+                    requirements you could not use this pattern as there is no control of operational sequence while
+                    pods
                     are
                     processing.</li>
             </ol>
@@ -258,7 +265,7 @@ total processing time:8545.3955 msec.  Accumulator 21908 msec.  2.56371984187273
             </p>
 
             <p>You can experiment with different parameters found at the top of <a
-                    href=https://github.com/calhuskerfan/srqc/blob/topic/initial/src/srqc/Program.cs#L7>Program.cs</a>,
+                    href=https://github.com/calhuskerfan/srqc/blob/main/src/srqc/Program.cs#L7>Program.cs</a>,
                 the defaults are:</p>
             <div class="container my-3">
                 <div class="language-csharp highlighter-rouge">
@@ -309,10 +316,9 @@ total processing time:8545.3955 msec.  Accumulator 21908 msec.  2.56371984187273
 
             <ol>
                 <li>Externalize the Types and logic for the pod and carousel. By templatizing the types for inbound and
-                    outbound
-                    messages and externalizing the pod processing logic the system can be re-used.</li>
+                    outbound messages and externalizing the pod processing logic the system can be re-used.</li>
                 <li>Tighten up the thread and event synchronization.</li>
-                <li>Error Handling. What happens when a message fails, what should ripple upstream.</li>
+                <li>Error Handling Patterns. What happens when a message fails, what should ripple upstream.</li>
                 <li>Run as an IHostedService.</li>
                 <li>Incorporate a common message queue, I.e. rabbitMQ.</li>
             </ol>
@@ -320,7 +326,8 @@ total processing time:8545.3955 msec.  Accumulator 21908 msec.  2.56371984187273
         <div>
             <h2 id="summary">Summary</h2>
 
-            <div>In the end this project was primarily a thought exercise, however it was successful with the requirements that I had envisioned for it, namely:</div>
+            <div>In the end this project was primarily a thought exercise, however it was successful with the
+                requirements that I had envisioned for it, namely:</div>
             <ol>
                 <li>speeding up parallel processing of a FIFO queue where the bottleneck was the message processing
                     itself.
