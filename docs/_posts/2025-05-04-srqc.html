@@ -1,21 +1,12 @@
+---
+layout: post
+title: SR Queue Consumer
+subtitle: FIFO and a Galaxy Far Far Away
+description: A FIFO Queue consumer with a novel parallel processing technique
+---
 <!doctype html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="A FIFO Queue consumer with a novel parallel processing technique">
-    <title>SR Queue Consumer</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
-    <link href="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/prettify.css" rel="stylesheet">
-</head>
 
 <body>
-    <div class="container">
-        <h1 id="sr-queue-consumer">SR Queue Consumer</h1>
-        <p class="lead">
-            FIFO and a Galaxy Far Far Away
-        </p>
-        <hr />
         <div>
             <p>The SR Queue Consumer project explores a message queue consumer designed to
                 increase throughput of message transformations in a First In First Out (FIFO) manner. Its primary
@@ -90,7 +81,7 @@
             <h2 id="system-overview">System Overview</h2>
             <div class="container">The SR Queue Consumer has the following major system components</div>
             <div class="container my-3">
-                <div><img src="./assets/images/srloader.drawio.svg" alt="Alt text here" /></div>
+                <div><img src="/assets/images/srloader.drawio.svg" alt="Alt text here" /></div>
             </div>
             <p>The system contains a virtual carousel with a configurable number of pods. Pods operate on a message
                 via a thread assigned to the pod. The system loads and unloads the pods in order. As pods are loaded and
@@ -299,7 +290,5 @@ total processing time: 9693.9849 msec.  Accumulated 'Serial' Time: 52509 msec.  
 
             <p>Your mileage may vary.</p>
         </div>
-    </div>
 </body>
-
 </html>

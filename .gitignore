@@ -1,1 +1,14 @@
+docs/_site/*
 .user/*
+
+docs/_site
+docs/.sass-cache
+docs/.jekyll-cache
+docs/.jekyll-metadata
+docs/vendor
+docs/.gitignore
+docs/404.html
+docs/about.markdown
+docs/Gemfile
+docs/Gemfile.lock
+docs/index.markdown
