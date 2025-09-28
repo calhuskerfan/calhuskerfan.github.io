@@ -2,7 +2,7 @@
 
 This repo contains the content for my github pages. [calhuskerfan](https://calhuskerfan.github.io/)
 
-I use devcontainers to author and verify my posts, it is a much cleaner solution for me, considering my primary technologies, than trying to manage as part of my everyday toolkit.  The following are the steps I took to set up and use devcontainers.
+I am using [devcontainers](https://code.visualstudio.com/docs/devcontainers/containers) to author and and verify jekyll output before committing.
 
 ## Devcontainers
 
@@ -12,12 +12,12 @@ Environment:
 1. Visual Studio Code
 1. vs-code devcontainers plugin
 
-## Setup:
+## Setup
 
-1. started repo
-    1. initial docs
-1. added ./devcontainer/devcontainer.json
-1. open in devcontainer
+This setup assumes your repo has a /docs folder containing a valid jeckyll site compatabile with [github pages](https://docs.github.com/en/pages).
+
+1. added and configured ./devcontainer/devcontainer.json.  [Tutorial](https://code.visualstudio.com/docs/devcontainers/tutorial).
+1. in visual studio code open the repo in the devcontainer
 1. some sanity checks
     ```bash
     ruby -v
@@ -26,7 +26,15 @@ Environment:
     ```
 1. cd to /docs
 1. bundle install
-1. bundle exec jekyll serve --livereload
+
+## Usage
+
+1. cd to /docs
+1. bundle exec jekyll serve --livereload --drafts
+
+## Jekyll References
+
+The following sections are some notes on what I am using for my jekyll site and some of my favorite references.
 
 ### Themes
 
@@ -43,4 +51,5 @@ Currently using Minima
 
 
 ### Examples
+
 [peterroelants](https://peterroelants.github.io/)

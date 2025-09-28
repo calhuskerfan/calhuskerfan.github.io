@@ -1,8 +1,7 @@
 ---
 layout: post
-title: some c# code
+title: TESTING--some c# code
 description: a post to test how c# code is rendered
-published: false
 tags:
 - dotnet
 - GitHub Pages
