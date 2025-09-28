@@ -1,3 +1,5 @@
 .user/*
 Gemfile
 Gemfile.lock
+docs/_site/*
+docs/.jekyll-cache/*

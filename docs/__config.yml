@@ -1,7 +1,0 @@
-title: calhuskerfan
-
-# Build settings
-theme: minima
-#theme: minimal-mistakes-jekyll
-plugins:
-  - jekyll-feed
