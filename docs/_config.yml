@@ -21,15 +21,18 @@
 title: calhuskerfan
 email: calhuskerfan@yahoo.com
 description: >-
-  github pages for calhuskerfan
+  github pages publication for calhuskerfan
 #baseurl: "" # the subpath of your site, e.g. /blog
 #url: "" # the base hostname & protocol for your site, e.g. http://example.com
 #twitter_username: jekyllrb
-#github_username:  jekyll
+github_username:  calhuskerfan
 
 # Build settings
+
+# THEME
 theme: minima
 #theme: minimal-mistakes-jekyll
+
 #plugins:
 #  - jekyll-tagging
 #  - jekyll-feed
