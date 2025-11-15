@@ -2,9 +2,10 @@
 
 This repo contains the content for my github pages. [calhuskerfan](https://calhuskerfan.github.io/)
 
-I am using [devcontainers](https://code.visualstudio.com/docs/devcontainers/containers) to author and and verify jekyll output before committing.
 
 ## Devcontainers
+
+I am using [devcontainers](https://code.visualstudio.com/docs/devcontainers/containers) to author and and verify jekyll output before committing.
 
 Environment:
 1. Windows 11
@@ -12,7 +13,7 @@ Environment:
 1. Visual Studio Code
 1. vs-code devcontainers plugin
 
-## Setup
+## Setup and updates
 
 This setup assumes your repo has a /docs folder containing a valid jeckyll site compatabile with [github pages](https://docs.github.com/en/pages).
 
@@ -21,11 +22,29 @@ This setup assumes your repo has a /docs folder containing a valid jeckyll site 
 1. some sanity checks
     ```bash
     ruby -v
-    jekyll -v
     gem -v
+    jekyll -v
     ```
 1. cd to /docs
 1. bundle install
+
+Useful commands:
+1.  to view installed gems and versions
+    ````
+    gem list
+    ``` 
+1.  to view outdated gems
+    ```
+    gem outdated
+    ``` 
+1. update
+    ```
+    gem update <GEMNAME>
+    gem update
+    ```
+
+
+github [jekyll setup instructions](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/creating-a-github-pages-site-with-jekyll)
 
 ## Usage
 
@@ -53,3 +72,12 @@ Currently using Minima
 ### Examples
 
 [peterroelants](https://peterroelants.github.io/)
+
+### Notes and references to clean up
+
+* [Creating a GitHub Pages site with Jekyll](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/creating-a-github-pages-site-with-jekyll)
+
+* [rubygems basics](https://guides.rubygems.org/rubygems-basics/)
+https://emmatheeng.github.io/projects/blog_setup/blog-tags.html
+https://askubuntu.com/questions/259832/determine-which-version-of-a-gem-is-installed
+https://github.com/jekyll/minima
