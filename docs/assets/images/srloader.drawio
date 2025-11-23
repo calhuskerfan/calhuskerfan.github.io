@@ -1,17 +1,20 @@
-<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.1.2 Chrome/138.0.7204.243 Electron/37.4.0 Safari/537.36" version="28.1.2" pages="2">
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.2.8 Chrome/140.0.7339.240 Electron/38.4.0 Safari/537.36" version="28.2.8" pages="2">
   <diagram id="BLfMcc32RlRBh9GqwylI" name="Conduit">
     <mxGraphModel dx="1290" dy="522" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="SmKTWikKmV2x1xhcom1Y-24" value="" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;rotation=91;sketch=1;curveFitting=1;jiggle=2;fontSize=16;" parent="1" vertex="1">
+        <mxCell id="73ovlYQDcSRp_f4dlo7b-1" value="" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;" vertex="1" parent="1">
+          <mxGeometry x="320" y="139.13" width="490" height="81.75" as="geometry" />
+        </mxCell>
+        <mxCell id="SmKTWikKmV2x1xhcom1Y-24" value="" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;rotation=90;sketch=1;curveFitting=1;jiggle=2;fontSize=16;" parent="1" vertex="1">
           <mxGeometry x="549.3" y="40" width="60" height="276.75" as="geometry" />
         </mxCell>
         <mxCell id="SmKTWikKmV2x1xhcom1Y-1" value="Inbound Queue" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Comic Sans MS;fontSize=16;sketch=1;curveFitting=1;jiggle=2;" parent="1" vertex="1">
           <mxGeometry x="150" y="148.25000000000003" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="SmKTWikKmV2x1xhcom1Y-4" value="Outbound Queue" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Comic Sans MS;fontSize=16;sketch=1;curveFitting=1;jiggle=2;" parent="1" vertex="1">
-          <mxGeometry x="860" y="163.2530484541327" width="130" height="30" as="geometry" />
+          <mxGeometry x="860" y="150" width="130" height="60" as="geometry" />
         </mxCell>
         <mxCell id="SmKTWikKmV2x1xhcom1Y-5" value="" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Comic Sans MS;fontSize=16;sketch=1;curveFitting=1;jiggle=2;" parent="1" vertex="1">
           <mxGeometry x="522" y="158.25304845413268" width="40" height="40" as="geometry" />
@@ -51,7 +54,7 @@
         </mxCell>
         <mxCell id="SmKTWikKmV2x1xhcom1Y-18" value="" style="shape=message;html=1;outlineConnect=0;sketch=1;curveFitting=1;jiggle=2;fontFamily=Comic Sans MS;fontSize=16;" parent="SmKTWikKmV2x1xhcom1Y-17" vertex="1">
           <mxGeometry width="20" height="14" relative="1" as="geometry">
-            <mxPoint x="-10" y="-7" as="offset" />
+            <mxPoint x="-20" y="-8" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="SmKTWikKmV2x1xhcom1Y-19" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;sketch=1;curveFitting=1;jiggle=2;fontFamily=Comic Sans MS;fontSize=16;" parent="1" source="SmKTWikKmV2x1xhcom1Y-10" target="SmKTWikKmV2x1xhcom1Y-4" edge="1">
@@ -71,7 +74,7 @@
             <mxPoint x="950" y="139.33000000000004" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="lvAjxfI9rUrdwIDh2ZyY-5" value="" style="html=1;verticalLabelPosition=bottom;align=center;labelBackgroundColor=#ffffff;verticalAlign=top;strokeWidth=1;strokeColor=#0080F0;shadow=0;dashed=0;shape=mxgraph.ios7.icons.envelope_(message);sketch=1;curveFitting=1;jiggle=2;" vertex="1" parent="1">
+        <mxCell id="lvAjxfI9rUrdwIDh2ZyY-5" value="" style="html=1;verticalLabelPosition=bottom;align=center;labelBackgroundColor=#ffffff;verticalAlign=top;strokeWidth=1;strokeColor=#0080F0;shadow=0;dashed=0;shape=mxgraph.ios7.icons.envelope_(message);sketch=1;curveFitting=1;jiggle=2;" parent="1" vertex="1">
           <mxGeometry x="532" y="168.38" width="20" height="20" as="geometry" />
         </mxCell>
       </root>
