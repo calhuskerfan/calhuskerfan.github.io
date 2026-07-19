@@ -6,7 +6,8 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"mermaidchart.vscode-mermaid-chart"
+				"mermaidchart.vscode-mermaid-chart",
+				"github.copilot-chat"
 			]
 		}
 	}
